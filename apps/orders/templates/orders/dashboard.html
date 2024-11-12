@@ -1,0 +1,51 @@
+{% extends 'theme/base.html' %}
+{% load account %}
+{% load static %}
+{% load order_tags %}
+{% block head %}
+
+{% endblock head %}
+
+{% block body %}
+
+<div class="p-5 flex flex-col">
+    <span class="text-3xl mb-5">Tablero de órdenes</span>
+
+    <nav class="border-t border-b border-gray-400 h-10 mx-4 px-4">
+        <div id="nav-tab" class="-mb-px flex justify-strt">
+            <a  class="nav-tab tracking-wide text-base py-3 pr-8 active" href="#compras">
+                Compras 
+            </a>
+            <a class="nav-tab tracking-wide text-base py-3 pr-8"
+                href="#ventas">
+                Ventas
+            </a>
+
+        </div>
+    </nav> 
+
+    <div class="flex flex-row">
+        <div class="w-1/5">
+            TODO: Filtros
+        </div>
+        <div class="w-full">
+            <div id="compras" class="tab-pane active">
+                <div class="grid grid-cols-1 sm:grid-cols-2  md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-2 mb-4 mr-8 md:m-0">
+                    
+
+                </div>
+                <table>
+                    <tbody>
+                        {% for eachOrder in orders %}
+
+                        {% order_row eachOrder %}
+    
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock body %}

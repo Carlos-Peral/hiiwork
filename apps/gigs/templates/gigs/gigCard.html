@@ -1,0 +1,50 @@
+<a class="flex flex-col transition duration-150 ease-in-out shadow hover:shadow-lg rounded-lg overflow-hidden" href="{{ gig.get_absolute_url }}">
+
+    <div class="h-24">
+        {% if gig.files.all.0 %}
+            {{gig.files.all.0.get_html_item|safe}}
+        {% endif %}
+    </div>
+
+    <div class="text-lg my-5">
+        {{ gig.title }}
+    </div>
+
+    <div class="flex flex-row mb-5 px-2 ">
+        <div class="flex-1   flex flex-col items-center">
+            <div class="font-semibold">
+                {{gig.rating}}
+            </div>
+            <div class="font-light text-xs ">
+                Valoraciones
+            </div>
+        </div>
+
+        <div class="flex-1 flex flex-col items-center">
+            <div class="font-semibold">
+                {{gig.times_ordered}}
+            </div>
+            <div class="font-light text-xs">
+                Contrataciones
+            </div>
+        </div>
+
+        <div class="flex-1 flex flex-col items-center">
+            <div class="font-semibold">
+                {{gig.lowest_price}}
+            </div>
+            <div class="font-light text-xs">
+                Desde
+            </div>
+        </div>
+        
+    </div>
+
+
+
+    
+
+        
+    
+
+</a>

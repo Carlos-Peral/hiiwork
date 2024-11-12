@@ -1,0 +1,45 @@
+<a>
+    <tr>
+        <td class="border-r-2 border-gray-300 h-20 w-1/12">
+            <a  href="/chat/{{ order.orderID }}">
+               {{ orderDetails.package.gig.files.all.0.get_html_item | safe }} 
+            </a>
+        </td>
+
+        <td class="border w-2/12 border-gray-300">
+            <a  href="{{ order.get_absolute_url }}">
+                {{ orderDetails.package.gig.title }}
+            </a>
+        </td>
+        <td class="border w-2/12 border-gray-300">
+            <a href="{{ order.get_gig_author.get_portfolio_url }}">
+                <div class="flex flex-col w-full">
+                    <span>Freelancer:</span>
+                    <div class="flex flex-row justify-between">
+                        <span> {{ order.get_gig_author.get_displayable_name }} </span>
+                        <a href="{{ order.get_gig_author.get_portfolio_url }}" class="block flex w-10 h-10 mr-5">
+                            <img class="rounded-full object-cover"
+                            src=https://hiiwork.s3.amazonaws.com/media/public/{{order.get_gig_author.profilePic}}
+                            alt="{{order.get_gig_author.user.username}}">
+                          </a>
+                    </div>
+                </div>
+                
+            </a>
+            
+        </td>
+        <td class="border w-1/12 border-gray-300">
+            <div class="flex flex-col w-full items-center">
+                <span>Fecha de entrega:</span>
+                <span> {{ order.get_delivery_date }}</span>
+            </div>
+        </td>
+        <td class="border w-2/12 border-gray-300">
+            <div class="flex flex-col w-full items-center">
+                <span>Estatus del pedido:</span>
+                <span> {{ order.get_delivery_date }}</span>
+            </div>
+        </td>
+    </tr>
+    
+</a>

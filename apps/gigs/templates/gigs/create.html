@@ -1,0 +1,115 @@
+{% extends 'theme/base.html' %}
+{% load account %}
+{% load static %}
+
+{% block head %}
+<script src="{% static 'js/dropzone.min.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/dropzone.min.css' %}">
+<script src="{% static 'js/plyr.min.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/plyr.css' %}">
+
+{% endblock head %}
+
+{% block body %}
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <div class="flex-col mx-10 my-5 p-5">
+        <div action="{% url 'upload-file'%}" class="dropzone" id="my-awesome-dropzone"></div>
+
+        {% if files %}
+
+        <div class="flex flex-row flex-wrap">
+
+            {% for eachFile in files %}
+            <div id="{{  eachFile.pk }}" class="relative">
+                <div class="w-64 h-64 flex items-center border-white hover:border-green-500 hover: border-4">
+                    {{ eachFile.get_html_item | safe }}
+                </div>
+
+                <div class="absolute">
+                    <div onclick="removeAlreadyUploadedFile({{  eachFile.pk }})"
+                        class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
+                        X
+                    </div>
+                </div>
+            </div>
+
+
+            {% endfor %}
+
+        </div>
+
+        {% endif %}
+    </div>
+
+    <button type="submit" id="postButton"
+        class="bg-green-400 border border-green-400 text-white hover:bg-white hover:text-green-400 font-bold text-lg  p-2 mt-8">Siguiente</button>
+</form>
+
+<script>
+    //This dict is used to store the pk of all uploaded files
+    uploadedFiles = {}
+
+    var postButton = document.getElementById('postButton')
+
+    function disablePostButton() {
+        postButton.className  += ' opacity-50 cursor-not-allowed';
+        postButton.disabled = true;
+    }
+    function enablePostButton() {
+        postButton.className = postButton.className.replace(' opacity-50 cursor-not-allowed', '');
+        postButton.disabled = false;
+    }
+
+    function sendRemoveRequest(pk) {
+        let url = "{% url 'delete-file'%}";
+        let method = "POST";
+        let postData = pk;
+        let shouldBeAsync = true;
+        let request = new XMLHttpRequest();
+        request.onload = function () {
+        }
+        request.open(method, url, shouldBeAsync);
+        request.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+        request.send(postData);
+    }
+
+    function removeAlreadyUploadedFile(pk) {
+        sendRemoveRequest(pk);
+        document.getElementById(pk).remove();
+    }
+
+    Dropzone.options.myAwesomeDropzone = {
+        paramName: 'files', // The name that will be used to transfer the file
+        maxFilesize: 50, // MB
+        addRemoveLinks: true,
+        maxFiles: 10,
+        acceptedFiles: 'image/jpeg, image/png, image/gif ,video/mp4, audio/x-wav, audio/mpeg, application/pdf',
+        sending: function (file, xhr, formData) {
+            formData.append("source", 'gig-creation');
+            formData.append("key", '{{ form.instance.pk }}');
+            formData.append("csrfmiddlewaretoken", '{{ csrf_token }}');
+        },
+        complete: function (file) {
+            enablePostButton();
+        },
+        processing: function (file) {
+            disablePostButton();
+        },
+        init: function () {
+            this.on("success", function (file, response) {
+                //Save the pk in the dict in case we want to delete it
+                uploadedFiles[file.name] = response
+            });
+            this.on("removedfile", function (file) {
+                sendRemoveRequest(uploadedFiles[file.name])
+            });
+        }
+
+    };
+
+</script>
+
+
+{% endblock body %}

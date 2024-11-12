@@ -1,0 +1,123 @@
+{% extends 'theme/base.html' %}
+{% load account %}
+{% block body %}
+
+
+<div class="mx-16 my-6">
+    <div class="flex">
+        <div class="w-9/12">
+            <p class="text-lg font-semibold">Resumen de tu pedido</p>
+            <p class="text-2xl font-bold">{{ package.gig.title }}</p>
+
+
+            <p class="text-lg font-semibold">{{ package.get_package_tier }}</p>
+            <p class="font-normal">{{ package.description }}</p>
+
+            <p class="text-lg font-semibold">Información de Entrega</p>
+            <ul class="list-disc list-inside">
+                <li>
+                    <span class="text-lg font-normal">Fecha de entrega del trabajo final: {{ deliveryDate }}</span>
+                </li>
+                <li>
+                    <span class="text-lg font-normal">Número de revisiones sobre el trabajo final dispoibles:
+                        {{ package.revisions }}</span>
+                </li>
+                <li>
+                    <span class="text-lg font-normal">Tiempo que el Freelancer tiene para corregir: 2 días</span>
+                </li>
+            </ul>
+
+
+
+
+            {% if requirements %}
+            <p class="text-lg font-semibold">Requisitos</p>
+
+            <ul class="list-disc list-inside">
+                {% for eachRequirement in requirements %}
+                <li>
+                    <span class="text-lg font-medium">{{ eachRequirement.requirement }}</span>
+                    <span class="text-lg font-normal"></p>{{ eachRequirement.description }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+
+
+            {% if features or selectedExtras %}
+            <p class="text-lg font-semibold">Incluye:</p>
+
+            <ul class="list-disc list-inside">
+                {% for eachFeature in features %}
+                <li>
+                    {{ eachFeature.name }} ✅
+                </li>
+                {% endfor %}
+
+            </ul>
+
+            <ul class="list-disc list-inside">
+                {% for eachExtra in selectedExtras %}
+                <li>
+                    {{ eachExtra.1.title }}
+                </li>
+                {% endfor %}
+
+            </ul>
+            {% endif %}
+
+
+
+
+
+
+            <p class="text-lg font-semibold">Acerca del Freelancer</p>
+            <div class="flex-row">
+
+                <img class="rounded-full h-10 w-10 object-cover" src={{author.get_profile_pic_url}}
+                    alt="{{author.user.username}}">
+
+                <a class="font-normal">{{ author.get_displayable_name }}</a>
+                <a class="font-normal">{{ author.get_user_categories }}</a>
+                <a class="font-normal">{{ author.get_stars_as_seller }}</a>
+            </div>
+        </div>
+        <div>
+            <div class="flex-col">
+                <p class="text-lg font-semibold">Detalles de la orden</p>
+                <div class="mt-4">
+                    <div class="flex">
+                        <div>
+                            Precio inicial
+                        </div>
+                        <div>
+                            $ {{ package.price }}
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <div class="flex">
+                        <div>
+                            Extras
+                        </div>
+                        <div>
+                            $ {{ extrasPrice }}
+                        </div>
+                    </div>
+                </div>
+                {{ totalPrice }}
+
+
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit"
+                        class="bg-green-400 border border-green-400 text-white hover:bg-white hover:text-green-400 font-bold text-lg  p-2 mt-8">Comprar</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+{% endblock body %}

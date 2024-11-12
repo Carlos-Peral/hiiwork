@@ -1,0 +1,89 @@
+@tailwind base;
+.content-div:hover {
+    background-image:
+        linear-gradient(to right,
+            rgba(126, 213, 111, 0.801), hsla(160, 64%, 43%, 0.801))
+}
+
+.content-div:hover .fd-cl {
+    opacity: 0.25;
+}
+
+.content-div:hover .fd-sh {
+    opacity: 1;
+}
+body.modal-open {
+    overflow: visible;
+}
+
+.animated {
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+}
+
+.animated.faster {
+    -webkit-animation-duration: 500ms;
+    animation-duration: 500ms;
+}
+
+.fadeIn {
+    -webkit-animation-name: fadeIn;
+    animation-name: fadeIn;
+}
+
+.fadeOut {
+    -webkit-animation-name: fadeOut;
+    animation-name: fadeOut;
+}
+
+.nav-tab { 
+    --text-opacity: 1;
+    color: #a0aec0;
+    color: rgba(160, 174, 192, var(--text-opacity));
+  }
+  
+.nav-tab.active { 
+    --text-opacity: 1;
+    color: #1a202c;
+    color: rgba(26, 32, 44, var(--text-opacity));
+}
+
+.nav-tab:hover { 
+    --text-opacity: 1;
+    color: #1a202c;
+    color: rgba(26, 32, 44, var(--text-opacity));
+}
+
+.tab-pane { 
+    display: none;
+  }
+  
+.tab-pane.active { 
+    display: block; 
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+
+@tailwind components;
+@tailwind utilities;

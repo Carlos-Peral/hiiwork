@@ -1,0 +1,139 @@
+{% extends 'theme/base.html' %}
+{% load account %}
+{% load static %}
+{% block body %}
+<div class="mx-16 my-6">
+    <p class="text-green-600 ">{{ gig.category.name }}</p>
+    <p class="text-2xl font-bold">{{ gig.title }}</p>
+
+    <p class="text-lg font-semibold">Descripción</p>
+    <p class="font-normal">{{ gig.description }}</p>
+
+    {% if requirements %}
+    <p class="text-lg font-semibold">Requisitos</p>
+
+    <ul class="list-disc list-inside">
+        {% for eachRequirement in requirements %}
+        <li>
+            <span class="text-lg font-medium">{{ eachRequirement.requirement }}</span>
+            <span class="text-lg font-normal"></p>{{ eachRequirement.description }}</span>
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <p class="text-lg font-semibold">Acerca del Freelancer</p>
+    <div class="flex-row">
+
+        <img class="rounded-full h-10 w-10 object-cover" src={{author.get_profile_pic_url}}
+            alt="{{author.user.username}}">
+
+        <a class="font-normal">{{ author.get_displayable_name }}</a>
+        <a class="font-normal">{{ author.get_user_categories }}</a>
+        <a class="font-normal">{{ author.get_stars_as_seller }}</a>
+    </div>
+
+    <p class="text-lg font-semibold">Elige un paquete</p>
+
+    <table class="table-fixed">
+        <thead>
+            <tr class="text-white">
+                <th class="px-4 py-2 w-1/4"></th>
+                <th class="px-4 py-2 bg-teal-400 w-1/4">Basico<p>${{packages.0.price}}</p>
+                    <p>{{packages.0.description}}</p>
+                </th>
+                <th class="px-4 py-2 bg-blue-400 w-1/4">Normal<p>${{packages.1.price}}</p>
+                    <p>{{packages.1.description}}</p>
+                </th>
+                <th class="px-4 py-2 bg-indigo-500 w-1/4">Pro<p>${{packages.2.price}}</p>
+                    <p>{{packages.2.description}}</p>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="bg-gray-400">
+                <td class=" px-4 py-2">Incluye</td>
+                <td class=" px-4 py-2"></td>
+                <td class=" px-4 py-2"></td>
+                <td class=" px-4 py-2"></td>
+            </tr>
+            <tr class="bg-gray-100">
+                <td class="border px-4 py-2"> Revisiones</td>
+                <td class="border px-4 py-2 text-center">
+                    {{packages.0.revisions}}
+                </td>
+                <td class="border px-4 py-2 text-center">{{packages.1.revisions}}</td>
+                <td class="border px-4 py-2 text-center">{{packages.2.revisions}}</td>
+            </tr>
+
+            {% for eachFeature in features %}
+
+            <tr class="bg-gray-100">
+                <td class="border px-4 py-2"> {{ eachFeature.name }}</td>
+                <td class="border px-4 py-2 text-center">
+                    {% if eachFeature.tier1 %}
+                    ✅
+                    {% else %}
+                    ❌
+                    {% endif %}
+                </td>
+                <td class="border px-4 py-2 text-center">
+                    {% if eachFeature.tier2 %}
+                    ✅
+                    {% else %}
+                    ❌
+                    {% endif %}
+                </td>
+                <td class="border px-4 py-2 text-center">
+                    {% if eachFeature.tier3 %}
+                    ✅
+                    {% else %}
+                    ❌
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+            <form method="POST">
+                {% csrf_token %}
+                {% if extras %}
+
+                <tr class="bg-gray-400">
+                    <td class=" px-4 py-2">Extras</td>
+                    <td class=" px-4 py-2"></td>
+                    <td class=" px-4 py-2"></td>
+                    <td class=" px-4 py-2"></td>
+                </tr>
+
+                {% for eachExtra in extras %}
+
+                <tr class="bg-gray-100">
+                    <td class="border px-4 py-2">{{eachExtra.extra.title}}</td>
+                    <td class="border px-4 py-2">{{eachExtra.extra_B}}</td>
+                    <td class="border px-4 py-2">{{eachExtra.extra_N}}</td>
+                    <td class="border px-4 py-2">{{eachExtra.extra_P}}</td>
+                </tr>
+
+                {% endfor %}
+                {% endif %}
+
+                <tr class="bg-gray-100">
+                    <td class="border px-4 py-2">Total</td>
+                    <td class="border px-4 py-2"><button type="submit" name="B"
+                            class="bg-green-400 border border-green-400 text-white hover:bg-white hover:text-green-400 font-bold text-lg  p-2 mt-8">Comprar</button>
+                    </td>
+                    <td class="border px-4 py-2"><button type="submit" name="N"
+                            class="bg-green-400 border border-green-400 text-white hover:bg-white hover:text-green-400 font-bold text-lg  p-2 mt-8">Comprar</button>
+                    </td>
+                    <td class="border px-4 py-2"><button type="submit" name="P"
+                            class="bg-green-400 border border-green-400 text-white hover:bg-white hover:text-green-400 font-bold text-lg  p-2 mt-8">Comprar</button>
+                    </td>
+                </tr>
+            </form>
+        </tbody>
+    </table>
+
+
+</div>
+
+
+{% endblock body %}

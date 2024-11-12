@@ -1,0 +1,28 @@
+{% extends 'theme/base.html' %}
+{% load account %}
+{% block body %}
+
+<form method="POST">
+    {% csrf_token %}
+    Entrega rápida
+    <hr class="dashed">
+    {{ fastExtraFormset.management_form }}
+    {% for eachExtraForm in fastExtraFormset %}
+    {{ eachExtraForm.as_p }}
+    <hr class="dashed">
+    {% endfor %}
+    <hr class="dashed">
+
+    Extras adicionales
+    <hr class="dashed">
+    {{ extraFormset.management_form }}
+    {% for eachExtraForm in extraFormset %}
+    {{ eachExtraForm.as_p }}
+    <hr class="dashed">
+    {% endfor %}
+
+    <button type="submit"
+        class="bg-green-400 border border-green-400 text-white hover:bg-white hover:text-green-400 font-bold text-lg  p-2 mt-8">Siguiente</button>
+</form>
+
+{% endblock body %}

@@ -1,0 +1,14 @@
+ pep8
+ autopep8
+ pylint
+ Django
+ mysqlclient
+ sqlparse
+ pytz
+ django_allauth
+ django-simple-bulma
+ Pillow
+ boto3
+ django-storages
+ python-decouple
+ django-tailwind

@@ -1,0 +1,105 @@
+{% extends 'theme/base.html' %}
+{% load account %}
+{% load static %}
+
+{% block head %}
+
+<script src="{% static 'js/dropzone.min.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/dropzone.min.css' %}">
+
+{% endblock head %}
+
+{% block body %}
+<div class="mx-16 my-6">
+    <div class="flex">
+
+        <div class="flex flex-col w-9/12">
+            {% if thanks %}
+            <div>
+                <p class=" text-green-500 text-4xl font-black">THANKS MOTHERFUCKER</p>
+            </div>
+            {% endif %}
+            <p class="text-lg font-semibold">Envío de Requisitos</p>
+            <form id="formID" method="POST" class="my-10 flex flex-col">
+                {% csrf_token %}
+                {% for eachrequirement in requirementFormset %}
+                <div class="flex flex-row">
+                    <div class="flex flex-col w-9/12">
+                        <div>
+                            {{ eachrequirement.instance.requirement.requirement }}
+                        </div>
+                        <div>
+                            {{ eachrequirement.instance.requirement.description }}
+                        </div>
+                        <div>
+                            {{ eachrequirement.comments }}
+                        </div>
+                    </div>
+                    <div class="m-3">
+                        <div action="{% url 'upload-file'%}" class="dropzone" id="p{{eachrequirement.instance.pk}}">
+                        </div>
+
+                    </div>
+                </div>
+
+                {% endfor %}
+                <div onclick="uploadAllReqsAndPost();"
+                    class="bg-green-400 border border-green-400 text-white hover:bg-white hover:text-green-400 font-bold text-lg  p-2 mt-8">
+                    Siguiente</div>
+            </form>
+        </div>
+
+
+
+    </div>
+
+</div>
+
+
+<script>
+    var watchDogInt = 0
+    var watchDogInt2 = 0
+
+    function uploadAllReqsAndPost() {
+        //
+        {% for eachrequirement in requirementFormset %}
+        watchDogInt2 += dropzone{{ eachrequirement.instance.pk }}.getQueuedFiles().length
+        dropzone{{ eachrequirement.instance.pk }}.processQueue()
+        watchDogInt += {{ eachrequirement.instance.pk }}
+        {% endfor %}
+
+        if (watchDogInt2 == 0) {
+            document.getElementById("formID").submit();
+        }
+    }
+    //
+
+
+
+    {% for eachrequirement in requirementFormset %}
+    var dropzone{{ eachrequirement.instance.pk }} = new Dropzone("div#p{{eachrequirement.instance.pk}}", {
+        autoProcessQueue: false,
+        paramName: 'files', // The name that will be used to transfer the file
+        maxFilesize: 50, // MB
+        addRemoveLinks: true,
+        maxFiles: 10,
+        sending: function (file, xhr, formData) {
+            formData.append("source", 'requirement-delivery');
+            formData.append("key", '{{ eachrequirement.instance.pk }}');
+            formData.append("csrfmiddlewaretoken", '{{ csrf_token }}');
+        },
+        init: function () {
+            this.on("queuecomplete", function (file, response) {
+                watchDogInt -= {{ eachrequirement.instance.pk }}
+            if (watchDogInt == 0) {
+                document.getElementById("formID").submit();
+            }
+        });
+        }
+
+    });
+
+    {% endfor %}
+</script>
+
+{% endblock body %}
